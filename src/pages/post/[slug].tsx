@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Prismic from '@prismicio/client';
 
 import { getPrismicClient } from '../../services/prismic';
 
@@ -26,20 +27,35 @@ interface PostProps {
   post: Post;
 }
 
-// export default function Post() {
-//   // TODO
-// }
+export default function Post(props: PostProps) {
+  console.log('🚀 ~ file: [slug].tsx ~ line 30 ~ Post ~ props', props);
 
-// export const getStaticPaths = async () => {
-//   const prismic = getPrismicClient();
-//   const posts = await prismic.query(TODO);
+  return <div>post</div>;
+}
 
-//   // TODO
-// };
+export const getStaticPaths = async () => {
+  const prismic = getPrismicClient();
+  // const posts = await prismic.query();
 
-// export const getStaticProps = async context => {
-//   const prismic = getPrismicClient();
-//   const response = await prismic.getByUID(TODO);
+  return {
+    paths: [
+      // {
+      //   params: {
+      //     slug: "criando-um-blog-com-contador-de-visitas-usando-nextjs",
+      //   },
+      // },
+    ],
+    fallback: 'blocking',
+  };
+};
 
-//   // TODO
-// };
+export const getStaticProps = async context => {
+  const prismic = getPrismicClient();
+
+  const response = await prismic.getByUID('posts', context.params.uid);
+  console.log('🚀 ~ file: [slug].tsx ~ line 57 ~ response', response);
+
+  // TODO
+
+  return { props: { post: 'oi' } };
+};
