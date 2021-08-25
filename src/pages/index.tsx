@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -30,18 +31,34 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
-  const { results } = props.postsPagination;
+  const { results, next_page } = props.postsPagination;
+
+  const [posts, setPosts] = useState<Post[]>(results);
+  const [nextPage, setNextPage] = useState(next_page);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleNextPage = async () => {
+    if (currentPage !== 1 && nextPage === null) {
+      return;
+    }
+
+    const postsResults = await fetch(`${nextPage}`).then(response =>
+      response.json()
+    );
+    setNextPage(postsResults.next_page);
+    setCurrentPage(postsResults.page);
+    setPosts([...posts, ...postsResults.results]);
+  };
 
   return (
     <>
       <Header />
       <main className={styles.main}>
         <article className={styles.posts}>
-          {results.map(result => (
+          {posts.map(result => (
             <Link href={`/post/${result.uid}`}>
               <a key={result.uid} className={styles.post}>
-                {/* <strong>{result.data.title}</strong> */}
-                <strong>title</strong>
+                <strong>{result.data.title}</strong>
                 <p>{result.data.subtitle}</p>
                 <section>
                   <span>
@@ -118,6 +135,11 @@ export default function Home(props: HomeProps) {
               </a>
             </Link>
           ))}
+          {nextPage && (
+            <button type="button" onClick={handleNextPage}>
+              Carregar mais posts
+            </button>
+          )}
         </article>
       </main>
     </>
@@ -129,8 +151,15 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const postsResponse: any = await prismic.query(
     [Prismic.Predicates.at('document.type', 'posts')],
-    { pageSize: 2 }
+    { pageSize: 1 }
   );
 
-  return { props: { postsPagination: { results: postsResponse.results } } };
+  return {
+    props: {
+      postsPagination: {
+        results: postsResponse.results,
+        next_page: postsResponse.next_page,
+      },
+    },
+  };
 };

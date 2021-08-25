@@ -6,6 +6,7 @@
     cursor: pointer;
     padding: 1.5rem 0;
     display: block;
+    text-decoration: none;
 
     strong {
       color: white;
@@ -43,5 +44,17 @@
         }
       }
     }
+  }
+
+  button {
+    border: none;
+    background-color: transparent;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: justify;
+    color: #ff57b2;
+    cursor: pointer;
   }
 }
