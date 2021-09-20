@@ -3,7 +3,7 @@ import styles from './header.module.scss';
 export default function Header() {
   return (
     <header>
-      <div className={styles.logo}>
+      <a className={styles.logo} href="/">
         <svg
           width="239"
           height="27"
@@ -76,7 +76,7 @@ export default function Header() {
             fill="#FF57B2"
           />
         </svg>
-      </div>
+      </a>
     </header>
   );
 }
