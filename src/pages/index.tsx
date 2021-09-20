@@ -56,8 +56,8 @@ export default function Home(props: HomeProps) {
       <main className={styles.main}>
         <article className={styles.posts}>
           {posts.map(result => (
-            <Link href={`/post/${result.uid}`}>
-              <a key={result.uid} className={styles.post}>
+            <Link href={`/post/${result.uid}`} key={result.uid}>
+              <a className={styles.post}>
                 <strong>{result.data.title}</strong>
                 <p>{result.data.subtitle}</p>
                 <section>
