@@ -223,7 +223,7 @@ export const getStaticProps: GetStaticProps = async ({
       subtitle: response.data.subtitle,
       author: response.data.author,
       banner: {
-        url: response.data.banner.url,
+        url: response.data.banner.url ?? null,
       },
       content: response.data.content.map(content => {
         return {
